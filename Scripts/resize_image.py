@@ -36,7 +36,7 @@ def resize_image(image:Union[str,np.ndarray], new_width:int, new_length:int, pad
 
     # Determine mode and pad color
     mode = img.mode
-    if mode == 'L' and grayscale:
+    if mode == 'L' and not grayscale:
         pad_color = pad_clr[0] if isinstance(pad_clr, (tuple, list)) else pad_clr
     else:
         pad_color = pad_clr
