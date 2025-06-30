@@ -2,16 +2,12 @@ from PIL import Image
 import numpy as np
 from typing import Union
 
-<<<<<<< HEAD
-def resize_image(image:Union[str,np.ndarray], new_width:int, new_length:int, pad_clr:tuple) -> Image:
-=======
-def resize_image(image:Union[str,np.ndarray], new_width:int, new_length:int, pad_clr:tuple, channels:True) -> Image.Image:
->>>>>>> e48ade16d327d2b4eddea1a12695167f3a373f9c
+def resize_image(image:Union[str,np.ndarray], new_width:int, new_length:int, pad_clr:tuple, channels=True) -> Image.Image:
     """
     Resize an image to fit within a specified width and length, maintaining the aspect ratio.
     If the image does not fit within the specified dimensions, it will be padded with a specified color.
     This is not the same as just padding an image, because the old image will always try to maximize its area 
-    in the new image.
+    in the new image.`
     
     image: Image to be resized
     new_width: New width of the image
@@ -26,8 +22,6 @@ def resize_image(image:Union[str,np.ndarray], new_width:int, new_length:int, pad
         img = Image.open(image) 
     elif isinstance(image, np.ndarray):
         img = Image.fromarray(image)
-<<<<<<< HEAD
-=======
     else:
         raise ValueError("Unsupported image type")
     
@@ -44,6 +38,11 @@ def resize_image(image:Union[str,np.ndarray], new_width:int, new_length:int, pad
     mode = img.mode
     if mode == 'L' and not channels:
         pad_color = pad_clr[0] if isinstance(pad_clr, (tuple, list)) else pad_clr
+    elif mode == 'L' and channels:
+        # If channels=True, convert to RGB
+        img = img.convert('RGB')
+        mode = 'RGB'
+        pad_color = pad_clr
     else:
         pad_color = pad_clr
         
@@ -55,7 +54,6 @@ def resize_image(image:Union[str,np.ndarray], new_width:int, new_length:int, pad
     
     """
     #Old algorithm:
->>>>>>> e48ade16d327d2b4eddea1a12695167f3a373f9c
     width, length = img.size
     img_aspect_ratio = width/length #Calculate aspect ratio
     new_img = Image.new('RGB', (new_width, new_length), pad_clr) #Create background image
