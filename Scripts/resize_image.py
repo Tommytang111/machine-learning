@@ -1,6 +1,8 @@
 from PIL import Image
+import numpy as np
+from typing import Union
 
-def resize_image(image:str, new_width:int, new_length:int, pad_clr: tuple) -> Image:
+def resize_image(image:Union[str,np.ndarray], new_width:int, new_length:int, pad_clr:tuple) -> Image:
     """
     Resize an image to fit within a specified width and length, maintaining the aspect ratio.
     If the image does not fit within the specified dimensions, it will be padded with a specified color.
@@ -12,7 +14,11 @@ def resize_image(image:str, new_width:int, new_length:int, pad_clr: tuple) -> Im
     
     Returns: Resized image
     """
-    img = Image.open(image) #Open Image
+    #Open Image as either string or numpy array
+    if isinstance(image, str):
+        img = Image.open(image) 
+    elif isinstance(image, np.ndarray):
+        img = Image.fromarray(image)
     width, length = img.size
     img_aspect_ratio = width/length #Calculate aspect ratio
     new_img = Image.new('RGB', (new_width, new_length), pad_clr) #Create background image
